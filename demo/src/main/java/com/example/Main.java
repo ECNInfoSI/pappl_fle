@@ -2,7 +2,22 @@ package com.example;
 
 import java.util.LinkedList;
 
+/**
+ * Classe principale du programme de démonstration.
+ * Elle illustre différents types d'exceptions Java et
+ * permet de tester la saisie d'un personnage via la console.
+ *
+ * @author Maxence SCHWERER et Corentin GODARD
+ */
 public class Main {
+
+    /**
+     * Point d'entrée du programme.
+     * Cette méthode crée un personnage et lance la saisie de son âge
+     * depuis l'entrée standard.
+     *
+     * @param args arguments passés en ligne de c   ommande
+     */
     public static void main(String[] args) {
 /* 
         //java.lang.NullPointerException
@@ -35,16 +50,16 @@ public class Main {
         methodePrivate();
 */
         //ConcurrentModificationException
-        LinkedList<Integer> list = new LinkedList<>();
-        list.add(1);
-        list.add(2);
-        for (Integer s : list) {
-            list.add(3);            
-        }
+        //LinkedList<Integer> list = new LinkedList<>();
+        //list.add(1);
+        //list.add(2);
+        //for (Integer s : list) {
+        //    list.add(3);            
+        //}
 
+        Personnage Maxence = new Personnage();
+        Maxence.demander_throws();
     }
 
-    private static void methodePrivate() {
-        methodePrivate();
-    }
 }
+
