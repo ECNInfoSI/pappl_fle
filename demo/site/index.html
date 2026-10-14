@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Objets en mouvement</title>
+	<style>
+		* { box-sizing: border-box; }
+		body { margin: 0; min-height: 100vh; overflow: hidden; color: #fff; font-family: system-ui, sans-serif; background: radial-gradient(ellipse at 50% 110%, #39255f, #11152c 65%, #090e1c); }
+		main { position: relative; display: grid; min-height: 100vh; place-items: center; overflow: hidden; isolation: isolate; }
+		.title { z-index: 2; padding: 2rem; text-align: center; pointer-events: none; }
+		.title p { color: #b9b9d2; letter-spacing: .16em; text-transform: uppercase; font-size: .8rem; }
+		h1 { margin: .3rem 0; font-size: clamp(3rem, 10vw, 6rem); letter-spacing: -.07em; }
+		.title .caption { letter-spacing: 0; text-transform: none; }
+		.orb, .ring, .star, .cube { position: absolute; pointer-events: none; }
+		.orb { border-radius: 50%; animation: float var(--speed, 6s) ease-in-out infinite alternate; }
+		.orb.a { width: 120px; height: 120px; top: 15%; left: 12%; background: radial-gradient(circle at 32% 28%, #fff3c2, #ff9e79 42%, #d95091); box-shadow: 0 0 70px #ed679966; }
+		.orb.b { width: 76px; height: 76px; top: 22%; right: 16%; --speed: 5s; background: radial-gradient(circle at 32% 28%, #efffff, #64ddd7 45%, #4487df); box-shadow: 0 0 60px #55dfe477; }
+		.orb.c { width: 48px; height: 48px; bottom: 15%; left: 23%; --speed: 7s; background: radial-gradient(circle at 32% 28%, #fff, #b5a3ff 48%, #8059d9); }
+		.orb.d { width: 88px; height: 88px; right: 12%; bottom: 14%; --speed: 8s; background: radial-gradient(circle at 32% 28%, #ffffdc, #a8e587 48%, #38a995); }
+		.ring { top: 50%; left: 50%; width: 210px; height: 210px; border: 1px solid #b8a9ff66; border-radius: 50%; animation: spin 16s linear infinite; transform: translate(-50%, -50%) rotateX(68deg); }
+		.ring::after { content: ""; position: absolute; top: 20px; left: 23px; width: 12px; height: 12px; border-radius: 50%; background: #ffd080; box-shadow: 0 0 18px #ffd080; }
+		.ring.outer { width: 310px; height: 310px; border-color: #70dfdf44; animation-duration: 23s; animation-direction: reverse; }
+		.ring.outer::after { background: #70dfdf; box-shadow: 0 0 18px #70dfdf; }
+		.cube { top: 65%; right: 31%; width: 34px; height: 34px; border: 1px solid #e3caff; background: #a37ce533; animation: tumble 8s ease-in-out infinite; }
+		.star { width: 5px; height: 5px; border-radius: 50%; background: white; box-shadow: 0 0 12px 2px #c9c3ff; animation: twinkle 2s ease-in-out infinite alternate; }
+		.s1 { top: 48%; left: 8%; } .s2 { top: 13%; left: 36%; animation-delay: -.7s; }
+		.s3 { top: 44%; right: 8%; animation-delay: -1.2s; } .s4 { bottom: 9%; right: 38%; animation-delay: -.4s; }
+		@keyframes float { to { transform: translate(18px, -28px) scale(1.06); } }
+		@keyframes spin { to { transform: translate(-50%, -50%) rotateX(68deg) rotateZ(360deg); } }
+		@keyframes tumble { 50% { transform: translateY(-24px) rotate(180deg); } to { transform: rotate(360deg); } }
+		@keyframes twinkle { to { opacity: .25; transform: scale(.6); } }
+		@media (max-width: 600px) { .orb.a { width: 86px; height: 86px; left: 6%; } .orb.b { right: 7%; } .ring { width: 170px; height: 170px; } .ring.outer { width: 250px; height: 250px; } }
+		@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+	</style>
+</head>
+<body>
+	<main aria-label="Objets animés dans l’espace">
+		<div class="ring" aria-hidden="true"></div><div class="ring outer" aria-hidden="true"></div>
+		<div class="orb a" aria-hidden="true"></div><div class="orb b" aria-hidden="true"></div>
+		<div class="orb c" aria-hidden="true"></div><div class="orb d" aria-hidden="true"></div>
+		<div class="cube" aria-hidden="true"></div>
+		<i class="star s1" aria-hidden="true"></i><i class="star s2" aria-hidden="true"></i>
+		<i class="star s3" aria-hidden="true"></i><i class="star s4" aria-hidden="true"></i>
+		<section class="title"><p>Une petite expérience animée</p><h1>En orbite</h1><p class="caption">Des formes qui flottent dans l’espace.</p></section>
+	</main>
+</body>
+</html>
