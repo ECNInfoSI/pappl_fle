@@ -1,0 +1,3 @@
+[submodule "libs/logiquiz"]
+	path = libs/logiquiz
+	url = https://codeberg.org/ladigitale/logiquiz.git
