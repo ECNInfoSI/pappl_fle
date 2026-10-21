@@ -1,14 +1,18 @@
 # pappl_fle
 
-## Organisation
+## Organisation du projet
 
-*/docs :* Cahier des charges, schémas d'interface, compte rendus...
+- **`docs/`** : documentation du projet
+  - Cahier des charges
+  - Schémas d'interface
+  - Comptes rendus
 
-*/src :*
-    */ui :* interface graphique
-    */code :* logique, création d'exos, des variantes...
-    */data :* connexion à la bdd
-    */export :* génération PDF, Word...
+- **`src/`** : code source de l'application
+  - **`ui/`** : interface graphique
+  - **`code/`** : logique applicative, création des exercices et de leurs variantes
+  - **`data/`** : gestion des données et connexion à la base de données
+  - **`export/`** : génération de documents PDF, Word, etc.
 
-*/test :* tests unitaires et d'intégration
-*/assets :* ressources statiques (logos, polices...)
+- **`test/`** : tests unitaires et tests d'intégration
+
+- **`assets/`** : ressources statiques (logos, polices, etc.)
