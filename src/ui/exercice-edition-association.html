@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nouvel exercice — Association — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link is-active" href="exercices.html" aria-current="page">Mes exercices</a>
+        <a class="nav__link" href="sujets.html">Mes sujets</a>
+        <a class="nav__link" href="import-export.html">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="exercices.html">Mes exercices</a></li>
+            <li aria-current="page">Nouvel exercice</li>
+          </ol>
+          <h1 class="page-title">Nouvel exercice</h1>
+          <p class="page-subtitle">Étape 2 sur 2 — Association</p>
+        </div>
+        <div class="page-header__actions">
+          <a class="btn btn--secondary" href="exercices.html">Annuler</a>
+          <!-- Aperçu : ouvrir la page détail / un rendu en nouvel onglet (formtarget="_blank") -->
+          <button class="btn btn--secondary" type="submit" form="form-exercice" name="action" value="apercu" formtarget="_blank">Aperçu</button>
+          <button class="btn btn--primary" type="submit" form="form-exercice" name="action" value="enregistrer">Enregistrer</button>
+        </div>
+      </div>
+
+      <form id="form-exercice" class="stack" method="post" action="#">
+      <section class="card stack">
+        <div class="form-row form-row--meta">
+          <div class="field">
+            <label class="field__label" for="titre">Titre</label>
+            <input class="input" id="titre" name="titre" value="Vocabulaire de la cuisine">
+          </div>
+          <div class="field">
+            <label class="field__label" for="niveau">Niveau</label>
+            <select class="select" id="niveau" name="niveau">
+              <option selected>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="theme">Thème</label>
+            <select class="select" id="theme" name="theme">
+              <option selected>Grammaire</option><option>Conjugaison</option><option>Lexique</option><option>Compréhension écrite</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="type">Type</label>
+            <!-- Type choisi à l'étape 1 : affiché en lecture seule -->
+            <input class="input" id="type" name="type" value="Association" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="mots-cles">Mots-clés</label>
+          <!-- Saisie libre séparée par des virgules. Un vrai champ « tags » (puces) demanderait du JS. -->
+          <input class="input" id="mots-cles" name="mots_cles" value="article, déterminant, genre">
+        </div>
+      </section>
+      <section class="card">
+        <div class="field">
+          <label class="field__label" for="consigne">Consigne *</label>
+          <input class="input" id="consigne" name="consigne" value="Associez chaque mot à sa définition." required>
+        </div>
+      </section>
+
+        <section class="card">
+          <div class="card__header">
+            <h2 class="card__title">Paires à associer</h2>
+            <span class="card__hint">L’ordre de la colonne B sera mélangé à l’export</span>
+          </div>
+          <!-- Le trait rouge entre les colonnes est purement décoratif (CSS .pair__link) :
+               chaque ligne = une paire, pas besoin de dessiner de vraies liaisons. -->
+          <div class="pairs-head"><span></span><span>Colonne A</span><span></span><span>Colonne B</span><span></span></div>
+          <div class="pair">
+            <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+            <input class="input" name="paires[1][a]" value="une casserole" aria-label="Colonne A, ligne 1">
+            <span class="pair__link" aria-hidden="true"></span>
+            <input class="input" name="paires[1][b]" value="ustensile pour faire bouillir" aria-label="Colonne B, ligne 1">
+            <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <button type="button">Dupliquer</button>
+                <button type="button" class="is-danger">Supprimer</button>
+              </div>
+            </details>
+          </div>
+          <div class="pair">
+            <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+            <input class="input" name="paires[2][a]" value="éplucher" aria-label="Colonne A, ligne 2">
+            <span class="pair__link" aria-hidden="true"></span>
+            <input class="input" name="paires[2][b]" value="retirer la peau d’un légume" aria-label="Colonne B, ligne 2">
+            <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <button type="button">Dupliquer</button>
+                <button type="button" class="is-danger">Supprimer</button>
+              </div>
+            </details>
+          </div>
+          <div class="pair">
+            <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+            <input class="input" name="paires[3][a]" value="une poêle" aria-label="Colonne A, ligne 3">
+            <span class="pair__link" aria-hidden="true"></span>
+            <input class="input" name="paires[3][b]" value="ustensile pour faire frire" aria-label="Colonne B, ligne 3">
+            <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <button type="button">Dupliquer</button>
+                <button type="button" class="is-danger">Supprimer</button>
+              </div>
+            </details>
+          </div>
+          <div class="pair">
+            <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+            <input class="input" name="paires[4][a]" value="mijoter" aria-label="Colonne A, ligne 4">
+            <span class="pair__link" aria-hidden="true"></span>
+            <input class="input" name="paires[4][b]" value="cuire lentement à feu doux" aria-label="Colonne B, ligne 4">
+            <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <button type="button">Dupliquer</button>
+                <button type="button" class="is-danger">Supprimer</button>
+              </div>
+            </details>
+          </div>
+          <div style="margin:56px 0 0 24px"><button class="link-action" type="button">+ Ajouter une paire</button></div>
+        </section>
+      </form>
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="login">
+    <!-- Panneau bleu de gauche (masqué sous 1100px de large) -->
+    <aside class="login__aside">
+      <h1 class="login__title">Centrale App FLE</h1>
+      <p class="login__tagline">Créez et partagez vos exercices<br>de français langue étrangère.</p>
+      <p class="login__school">École Centrale de Pékin</p>
+    </aside>
+
+    <main class="login__main">
+      <div class="login__lang">
+        <label class="sr-only" for="lang">Langue</label>
+        <select class="select select--sm" id="lang" name="lang">
+          <option value="fr" selected>FR</option>
+          <option value="en">EN</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+
+      <!-- BACK : action = route d'authentification (POST) -->
+      <form class="login__form" method="post" action="accueil.html">
+        <img class="login__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+
+        <div>
+          <h2 class="login__heading">Connexion</h2>
+          <p class="login__sub">Accédez à votre bibliothèque d’exercices.</p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="identifiant">Identifiant</label>
+          <input class="input" id="identifiant" name="identifiant" autocomplete="username" required>
+        </div>
+
+        <div class="field">
+          <div class="field__label-row">
+            <label class="field__label" for="mdp">Mot de passe</label>
+            <a class="link-forgot" href="#">Mot de passe oublié ?</a>
+          </div>
+          <input class="input" type="password" id="mdp" name="mot_de_passe" autocomplete="current-password" required>
+        </div>
+
+        <!-- BACK : n'afficher ce bloc qu'en cas d'échec de connexion -->
+        <div class="alert alert--danger" role="alert">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M10 5.5v5.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14.2" r="1.2" fill="#fff"/></svg>
+          <span>Identifiant ou mot de passe incorrect. Réessayez.</span>
+        </div>
+
+        <button class="btn btn--primary btn--block btn--lg" type="submit">Se connecter</button>
+      </form>
+    </main>
+  </div>
+
+</body>
+</html>

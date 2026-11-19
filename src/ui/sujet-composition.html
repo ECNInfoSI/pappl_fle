@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Composer un sujet — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link" href="exercices.html">Mes exercices</a>
+        <a class="nav__link is-active" href="sujets.html" aria-current="page">Mes sujets</a>
+        <a class="nav__link" href="import-export.html">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="sujets.html">Mes sujets</a></li>
+            <li aria-current="page">Composition</li>
+          </ol>
+          <h1 class="page-title">Composer un sujet</h1>
+        </div>
+        <div class="page-header__actions">
+          <a class="btn btn--secondary" href="sujets.html">Annuler</a>
+          <button class="btn btn--primary" type="submit" form="form-sujet">Enregistrer</button>
+        </div>
+      </div>
+
+      <!-- ==================================================================
+           PAGE INTERACTIVE — le visuel est complet, la logique est à faire en JS :
+             - filtrer la banque (recherche + 3 selects) ;
+             - « + » : déplacer l'exercice dans « Exercices sélectionnés »
+               et passer la ligne de la banque en .is-added ;
+             - « Retirer » : l'inverse ;
+             - réordonner par glisser-déposer (la classe .is-dragging donne le
+               style de l'élément en cours de déplacement, cf. maquette) ;
+             - recalculer le total des points ;
+             - afficher .dropzone-empty quand il reste de la place / liste vide.
+           ================================================================== -->
+      <div class="grid-2" style="grid-template-columns:540px 1fr">
+        <section class="card">
+          <h2 class="card__title" style="margin-bottom:14px">Banque d’exercices</h2>
+          <label class="search" style="display:block;margin-bottom:12px">
+            <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5L17 17"/></svg>
+            <span class="sr-only">Rechercher</span>
+            <input class="input" type="search" placeholder="Rechercher…">
+          </label>
+          <div class="form-row" style="grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+            <select class="select" aria-label="Type"><option>Type</option><option>QCM</option><option>Texte à trous</option><option>Vrai / Faux</option><option>Association</option></select>
+            <select class="select" aria-label="Niveau"><option>Niveau</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option></select>
+            <select class="select" aria-label="Thème"><option>Thème</option><option>Grammaire</option><option>Conjugaison</option><option>Lexique</option></select>
+          </div>
+          <ul>
+            <li class="bank-item is-added">
+              <div><p class="bank-item__title">Les articles définis</p><p class="bank-item__meta">QCM · A1 · Grammaire</p></div>
+              <span class="bank-item__added">Ajouté <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.3 2.3 4.7-5"/></svg></span>
+            </li>
+            <li class="bank-item is-added">
+              <div><p class="bank-item__title">Passé composé ou imparfait ?</p><p class="bank-item__meta">Texte à trous · B1 · Conjugaison</p></div>
+              <span class="bank-item__added">Ajouté <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.3 2.3 4.7-5"/></svg></span>
+            </li>
+            <li class="bank-item">
+              <div><p class="bank-item__title">La vie à Paris</p><p class="bank-item__meta">Vrai / Faux · A2 · Compréhension écrite</p></div>
+              <!-- Ajout : soit bouton submit (aller-retour serveur), soit JS qui déplace l'élément à droite -->
+              <button class="icon-btn icon-btn--primary" type="button" aria-label="Ajouter « La vie à Paris »"><svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 5v10M5 10h10"/></svg></button>
+            </li>
+            <li class="bank-item is-added">
+              <div><p class="bank-item__title">Vocabulaire de la cuisine</p><p class="bank-item__meta">Association · A2 · Lexique</p></div>
+              <span class="bank-item__added">Ajouté <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.3 2.3 4.7-5"/></svg></span>
+            </li>
+            <li class="bank-item">
+              <div><p class="bank-item__title">Les pronoms COD / COI</p><p class="bank-item__meta">QCM · B1 · Grammaire</p></div>
+              <!-- Ajout : soit bouton submit (aller-retour serveur), soit JS qui déplace l'élément à droite -->
+              <button class="icon-btn icon-btn--primary" type="button" aria-label="Ajouter « Les pronoms COD / COI »"><svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 5v10M5 10h10"/></svg></button>
+            </li>
+            <li class="bank-item">
+              <div><p class="bank-item__title">Le subjonctif présent</p><p class="bank-item__meta">Texte à trous · B2 · Conjugaison</p></div>
+              <!-- Ajout : soit bouton submit (aller-retour serveur), soit JS qui déplace l'élément à droite -->
+              <button class="icon-btn icon-btn--primary" type="button" aria-label="Ajouter « Le subjonctif présent »"><svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 5v10M5 10h10"/></svg></button>
+            </li>
+            <li class="bank-item">
+              <div><p class="bank-item__title">Expressions de la météo</p><p class="bank-item__meta">Association · A1 · Lexique</p></div>
+              <!-- Ajout : soit bouton submit (aller-retour serveur), soit JS qui déplace l'élément à droite -->
+              <button class="icon-btn icon-btn--primary" type="button" aria-label="Ajouter « Expressions de la météo »"><svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 5v10M5 10h10"/></svg></button>
+            </li>
+          </ul>
+        </section>
+
+        <form class="card" id="form-sujet" method="post" action="#">
+          <div class="card__header" style="margin-bottom:10px">
+            <h2 class="card__title" style="font-size:15px">En-tête du sujet</h2>
+            <span class="card__hint">Apparaît en haut du document généré</span>
+          </div>
+          <div class="form-row" style="grid-template-columns:150px 1fr;margin-bottom:14px">
+            <div class="field">
+              <label class="field__label" for="promo">Promotion</label>
+              <input class="input" id="promo" name="promotion" value="2026–2027">
+            </div>
+            <div class="field">
+              <label class="field__label" for="cours">Intitulé du cours</label>
+              <input class="input" id="cours" name="cours" placeholder="À préciser">
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:14px">
+            <label class="field__label" for="titre-sujet">Titre du sujet</label>
+            <input class="input" id="titre-sujet" name="titre" value="Évaluation A1 — novembre">
+          </div>
+          <div class="field" style="margin-bottom:24px">
+            <label class="field__label" for="consigne-generale">Consigne générale</label>
+            <input class="input" id="consigne-generale" name="consigne" value="Répondez sans aide exterieur, durée 45 minutes.">
+          </div>
+
+          <div class="card__header" style="margin-bottom:10px">
+            <h2 class="card__title" style="font-size:15px">Exercices sélectionnés (3)</h2>
+            <span class="card__hint">Glissez pour réordonner</span>
+          </div>
+          <ol>
+            <li class="selected-item">
+              <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+              <span class="selected-item__num">1.</span>
+              <div class="selected-item__body"><p class="selected-item__title">Les articles définis</p><p class="selected-item__meta">QCM · A1</p></div>
+              <span class="selected-item__pts">4 pts</span>
+              <button class="link-action link-action--danger link-action--sm" type="button">Retirer</button>
+              <input type="hidden" name="exercices[]" value="">
+            </li>
+            <li class="selected-item is-dragging">
+              <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+              <span class="selected-item__num">2.</span>
+              <div class="selected-item__body"><p class="selected-item__title">Passé composé ou imparfait ?</p><p class="selected-item__meta">Texte à trous · B1</p></div>
+              <span class="selected-item__pts">5 pts</span>
+              <button class="link-action link-action--danger link-action--sm" type="button">Retirer</button>
+              <input type="hidden" name="exercices[]" value="">
+            </li>
+            <li class="selected-item">
+              <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+              <span class="selected-item__num">3.</span>
+              <div class="selected-item__body"><p class="selected-item__title">Vocabulaire de la cuisine</p><p class="selected-item__meta">Association · A2</p></div>
+              <span class="selected-item__pts">3 pts</span>
+              <button class="link-action link-action--danger link-action--sm" type="button">Retirer</button>
+              <input type="hidden" name="exercices[]" value="">
+            </li>
+          </ol>
+          <div class="dropzone-empty">Ajoutez des exercices depuis la banque</div>
+
+          <div class="total-bar">
+            <span class="total-bar__label">Total du sujet</span>
+            <span class="total-bar__value">12 pts</span>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
