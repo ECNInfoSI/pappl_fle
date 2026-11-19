@@ -1,0 +1,780 @@
+/* ==========================================================================
+   Centrale App FLE — feuille de style commune
+   --------------------------------------------------------------------------
+   Organisation :
+     1. Variables (couleurs, typo, rayons)
+     2. Base / reset
+     3. Mise en page (header, sidebar, contenu)
+     4. Composants génériques (boutons, champs, cartes, badges, tableaux…)
+     5. Composants « complexes » en HTML/CSS pur (segmented, menu ⋮, modale…)
+     6. Styles spécifiques à certaines pages
+   Convention de nommage : BEM léger (.bloc, .bloc__element, .bloc--variante)
+   Les états pilotés par le back utilisent des classes .is-xxx (ex : .is-active)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. Variables
+   ========================================================================== */
+:root {
+  /* Couleurs de marque */
+  --c-primary: #1B1F8A;        /* bleu Centrale */
+  --c-primary-hover: #12155E;
+  --c-primary-soft: #EEF0FB;   /* fonds de badges / item actif */
+  --c-primary-light: #C9CCF2;  /* texte secondaire sur fond bleu */
+  --c-accent: #C0191F;         /* rouge Centrale */
+
+  /* Texte */
+  --c-text: #1C1E2E;
+  --c-text-muted: #6B6F80;
+  --c-text-subtle: #9A9DAB;
+  --c-placeholder: #A4A7B5;
+
+  /* Surfaces & bordures */
+  --c-bg: #F6F7FA;
+  --c-surface: #FFFFFF;
+  --c-border: #E3E5EC;
+  --c-border-strong: #B9BCC8;
+
+  /* Couleurs sémantiques (texte / fond / bordure) */
+  --c-success: #1E7B4F;  --c-success-bg: #E7F4EE;
+  --c-warning: #9A6400;  --c-warning-bg: #FFF4DC;
+  --c-danger:  #C0191F;  --c-danger-bg:  #FBECEC;  --c-danger-border: #F0C9CB;
+  --c-neutral: #6B6F80;  --c-neutral-bg: #F1F2F5;
+
+  /* Typo */
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Rayons & ombres */
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow-pop: 0 8px 24px rgba(28, 30, 46, .12);
+  --shadow-modal: 0 20px 48px rgba(28, 30, 46, .25);
+
+  /* Dimensions de layout */
+  --header-h: 64px;
+  --sidebar-w: 240px;
+}
+
+
+/* ==========================================================================
+   2. Base
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--c-text);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img { display: block; max-width: 100%; }
+a { color: var(--c-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* Masque visuellement un élément mais le garde lisible par les lecteurs d'écran */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Petites icônes SVG inline : elles prennent la couleur du texte (currentColor) */
+.icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+
+/* ==========================================================================
+   3. Mise en page
+   ========================================================================== */
+
+/* --- Header ------------------------------------------------------------- */
+.app-header {
+  position: sticky; top: 0; z-index: 20;
+  height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand:hover { text-decoration: none; }
+.brand__logo { height: 36px; width: auto; }
+.brand__name {
+  padding-left: 14px;
+  border-left: 1px solid var(--c-border);
+  font-size: 18px; font-weight: 700; color: var(--c-primary);
+  line-height: 28px;
+}
+
+.header-right { display: flex; align-items: center; gap: 16px; }
+
+.user { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.user__name { font-size: 13px; font-weight: 600; line-height: 1.2; }
+.user__role { font-size: 12px; color: var(--c-text-muted); line-height: 1.2; }
+
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--c-primary-soft); color: var(--c-primary);
+  font-size: 12px; font-weight: 700;
+}
+
+.logout { font-size: 14px; color: var(--c-accent); }
+
+/* --- Structure principale ------------------------------------------------ */
+.app { display: flex; min-height: calc(100vh - var(--header-h)); }
+
+/* --- Sidebar ------------------------------------------------------------- */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0;
+  display: flex; flex-direction: column;
+  padding: 28px 12px 20px;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  position: sticky; top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+}
+
+.nav { display: flex; flex-direction: column; gap: 4px; }
+
+.nav__link {
+  position: relative;
+  display: block;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-size: 15px; color: var(--c-text);
+}
+.nav__link:hover { background: var(--c-bg); text-decoration: none; }
+
+/* Lien de la page courante : la classe .is-active est posée par le back */
+.nav__link.is-active {
+  background: var(--c-primary-soft);
+  color: var(--c-primary); font-weight: 700;
+}
+.nav__link.is-active::before {      /* barre rouge à gauche */
+  content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+  width: 3px; border-radius: 2px; background: var(--c-accent);
+}
+
+.nav__separator { height: 1px; margin: 12px 12px; background: var(--c-border); border: 0; }
+
+.sidebar__footer { margin-top: auto; padding: 0 12px; font-size: 12px; color: var(--c-text-subtle); }
+
+/* --- Contenu ------------------------------------------------------------- */
+.main { flex: 1; min-width: 0; padding: 26px 40px 40px; }
+
+/* En-tête de page : fil d'Ariane + titre + actions */
+.page-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 28px;
+}
+.page-header__actions { display: flex; gap: 12px; flex-shrink: 0; padding-bottom: 12px; }
+
+.breadcrumb { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; font-size: 13px; color: var(--c-text-muted); }
+.breadcrumb a { color: var(--c-text-muted); }
+.breadcrumb li + li::before { content: "/"; margin-right: 8px; color: var(--c-border-strong); }
+.breadcrumb [aria-current="page"] { color: var(--c-text); }
+
+.page-title { font-size: 28px; font-weight: 700; line-height: 1.3; letter-spacing: -.01em; }
+.page-subtitle { margin-top: 4px; font-size: 15px; color: var(--c-text-muted); }
+
+.section-title { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+
+/* Grilles utilitaires */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.grid-main-aside { display: grid; grid-template-columns: minmax(0, 1fr) 336px; gap: 24px; align-items: start; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+
+
+/* ==========================================================================
+   4. Composants génériques
+   ========================================================================== */
+
+/* --- Boutons ------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 40px; padding: 0 20px;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 600; line-height: 1;
+  cursor: pointer; white-space: nowrap;
+  transition: background-color .15s, border-color .15s;
+}
+.btn:hover { text-decoration: none; }
+
+.btn--primary { background: var(--c-primary); color: #fff; }
+.btn--primary:hover { background: var(--c-primary-hover); }
+
+.btn--secondary { background: var(--c-surface); color: var(--c-text); border-color: var(--c-border); }
+.btn--secondary:hover { border-color: var(--c-border-strong); }
+
+.btn--danger { background: var(--c-danger); color: #fff; }
+.btn--danger:hover { background: #9E1419; }
+
+.btn--danger-outline { background: var(--c-surface); color: var(--c-danger); border-color: var(--c-danger-border); }
+.btn--danger-outline:hover { background: var(--c-danger-bg); }
+
+.btn--block { width: 100%; }
+.btn--lg { height: 44px; }
+
+/* Lien d'action discret, ex : « + Ajouter une question » */
+.link-action {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font-size: 15px; font-weight: 600; color: var(--c-primary);
+}
+.link-action:hover { text-decoration: underline; }
+.link-action--danger { color: var(--c-danger); }
+.link-action--sm { font-size: 13px; }
+
+/* Bouton icône carré (corbeille, +…) */
+.icon-btn {
+  display: inline-grid; place-items: center;
+  width: 36px; height: 36px; padding: 0;
+  border: 1px solid var(--c-border); border-radius: var(--radius-sm);
+  background: var(--c-surface); color: var(--c-text); cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--c-border-strong); }
+.icon-btn--danger { color: var(--c-danger); }
+.icon-btn--primary { color: var(--c-primary); }
+.icon-btn--ghost { border-color: transparent; background: none; }
+
+/* --- Champs de formulaire ----------------------------------------------- */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field__label { font-size: 13px; color: var(--c-text); }
+.field__label-row { display: flex; justify-content: space-between; align-items: baseline; }
+.field__hint { font-size: 13px; color: var(--c-text-subtle); }
+
+.input, .select, .textarea {
+  width: 100%; height: 40px; padding: 0 12px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border); border-radius: var(--radius-sm);
+  font-size: 15px; color: var(--c-text);
+  transition: border-color .15s, box-shadow .15s;
+}
+.input::placeholder, .textarea::placeholder { color: var(--c-placeholder); }
+.input:focus, .select:focus, .textarea:focus {
+  outline: none; border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px rgba(27, 31, 138, .12);
+}
+.input[readonly] { background: var(--c-surface); }
+
+.textarea { height: auto; min-height: 120px; padding: 10px 12px; line-height: 1.5; resize: vertical; }
+
+/* <select> natif restylé : on retire la flèche système et on dessine un chevron */
+.select {
+  appearance: none; -webkit-appearance: none;
+  padding-right: 36px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%236B6F80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.select--sm { width: auto; height: 32px; font-size: 13px; font-weight: 600; padding: 0 30px 0 14px; background-position: right 10px center; }
+
+/* Champ de recherche avec loupe */
+.search { position: relative; }
+.search .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--c-text-muted); pointer-events: none; }
+.search .input { padding-left: 38px; }
+
+/* Champ avec suffixe (ex : « 1  pt ») */
+.input-suffix { position: relative; }
+.input-suffix .input { padding-right: 34px; }
+.input-suffix__unit { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--c-text-subtle); pointer-events: none; }
+
+/* Cases à cocher / boutons radio natifs : accent-color suffit à les colorer */
+input[type="checkbox"], input[type="radio"] {
+  width: 18px; height: 18px; margin: 0;
+  accent-color: var(--c-primary); cursor: pointer; flex-shrink: 0;
+}
+.check { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; }
+
+.form-row { display: grid; gap: 16px; }
+.form-row--meta { grid-template-columns: minmax(0, 1fr) 120px 200px 184px; }
+.form-row--2 { grid-template-columns: 1fr 1fr; }
+
+/* --- Cartes -------------------------------------------------------------- */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+.card__header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 16px; }
+.card__title { font-size: 17px; font-weight: 700; }
+.card__subtitle { margin-top: 4px; font-size: 14px; color: var(--c-text-muted); }
+.card__hint { font-size: 13px; color: var(--c-text-muted); }
+.card__label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--c-text-muted); }
+.card + .card { margin-top: 16px; }
+/* Dans une grille ou un .stack, c'est le gap qui espace les cartes */
+.stack > .card + .card,
+.grid-2 > .card + .card,
+.grid-main-aside > .card + .card { margin-top: 0; }
+.card--flush { padding: 0; overflow: hidden; }
+
+/* --- Badges (type d'exercice, statut, rôle) ------------------------------ */
+.badge {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+/* Types d'exercice */
+.badge--qcm, .badge--primary  { background: var(--c-primary-soft); color: var(--c-primary); }
+.badge--trous, .badge--success { background: var(--c-success-bg); color: var(--c-success); }
+.badge--vraifaux, .badge--warning { background: var(--c-warning-bg); color: var(--c-warning); }
+.badge--association, .badge--danger { background: var(--c-danger-bg); color: var(--c-danger); }
+.badge--neutral { background: var(--c-neutral-bg); color: var(--c-neutral); }
+/* Le QCM est un peu plus compact dans la maquette */
+.badge--qcm { padding: 0 6px; }
+
+/* --- Alertes ------------------------------------------------------------- */
+.alert {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 16px; border-radius: var(--radius);
+  border: 1px solid transparent; font-size: 14px;
+}
+.alert--danger  { background: var(--c-danger-bg);  color: var(--c-danger);  border-color: var(--c-danger-border); }
+.alert--warning { background: var(--c-warning-bg); color: var(--c-warning); }
+.alert--success { background: var(--c-success-bg); color: var(--c-success); }
+.alert strong { font-weight: 600; }
+.alert__meta { display: block; margin-top: 2px; font-size: 12px; }
+
+/* --- Tableaux ------------------------------------------------------------ */
+.table-wrap {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.table th {
+  height: 44px; padding: 0 16px; text-align: left;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em;
+  color: var(--c-text-muted); background: var(--c-bg);
+  border-bottom: 1px solid var(--c-border);
+  white-space: nowrap;
+}
+.table td {
+  height: 56px; padding: 0 16px;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text-muted);
+}
+.table tr:last-child td { border-bottom: 0; }
+.table tbody tr:hover td { background: #FAFBFD; }
+.table .cell-strong { color: var(--c-text); font-weight: 600; }
+.table .cell-title { color: var(--c-text); }
+.table .cell-check { width: 48px; padding-right: 0; }
+.table .cell-actions { width: 1%; white-space: nowrap; text-align: right; }
+.table .cell-actions > * { vertical-align: middle; }
+.table .open-link { font-weight: 700; margin-right: 16px; }
+
+/* Barre de filtres au-dessus des listes */
+.toolbar { display: flex; gap: 16px; margin-bottom: 16px; }
+.toolbar .search { flex: 0 1 440px; }
+.toolbar .select { width: auto; min-width: 150px; }
+
+/* Puces de filtres actifs */
+.active-filters { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: var(--c-text-muted); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 24px; padding: 0 12px; border-radius: 999px;
+  background: var(--c-primary-soft); color: var(--c-primary);
+  font-size: 12px; font-weight: 700;
+}
+.chip__remove { border: 0; background: none; padding: 0; color: inherit; cursor: pointer; font-size: 14px; line-height: 1; }
+
+/* --- Pagination ---------------------------------------------------------- */
+.pagination-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; font-size: 14px; color: var(--c-text-muted); }
+.pagination { display: flex; gap: 8px; }
+.pagination a, .pagination span {
+  display: grid; place-items: center;
+  min-width: 32px; height: 32px; padding: 0 8px;
+  border: 1px solid var(--c-border); border-radius: var(--radius-sm);
+  background: var(--c-surface); color: var(--c-text);
+  font-size: 14px; font-weight: 600;
+}
+.pagination a:hover { text-decoration: none; border-color: var(--c-border-strong); }
+.pagination .is-current { background: var(--c-primary); border-color: var(--c-primary); color: #fff; }
+
+/* --- Listes de lignes « carte grise » (questions, affirmations, paires…) -- */
+.row-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: var(--radius);
+  background: var(--c-bg);
+}
+.row-item + .row-item { margin-top: 10px; }
+.row-item__num { width: 20px; font-weight: 700; color: var(--c-text-muted); font-size: 15px; }
+
+/* Poignée de glisser-déposer (⋮⋮) */
+.drag-handle { color: var(--c-border-strong); cursor: grab; flex-shrink: 0; }
+
+
+/* ==========================================================================
+   5. Composants « complexes » réalisables en HTML/CSS pur
+   ========================================================================== */
+
+/* --- 5.1 Segmented control (Élève / Correction, PDF / HTML, Vrai / Faux) ---
+   Principe : des <input type="radio"> masqués + des <label>. Le sélecteur
+   « input:checked + span » stylise l'option choisie. Aucun JS nécessaire ;
+   la valeur sélectionnée part avec le formulaire comme un radio classique. */
+.segmented {
+  display: inline-flex; padding: 3px;
+  background: var(--c-bg); border-radius: var(--radius);
+}
+.segmented label { position: relative; flex: 1; cursor: pointer; }
+.segmented input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.segmented span {
+  display: block; padding: 6px 30px; border-radius: var(--radius-sm);
+  text-align: center; font-size: 14px; color: var(--c-text-muted);
+  border: 1px solid transparent;
+}
+.segmented input:checked + span {
+  background: var(--c-surface); color: var(--c-text); font-weight: 600;
+  border-color: var(--c-border);
+}
+.segmented input:focus-visible + span { outline: 2px solid var(--c-primary); outline-offset: 1px; }
+.segmented--block { display: flex; }
+
+/* Variante Vrai / Faux : vert pour « vrai », rouge pour « faux » */
+.segmented--truefalse { padding: 2px; background: var(--c-surface); border: 1px solid var(--c-border); }
+.segmented--truefalse span { padding: 6px 0; width: 98px; }
+.segmented--truefalse input:checked + span { border-color: transparent; font-weight: 700; }
+.segmented--truefalse .is-true  input:checked + span { background: var(--c-success-bg); color: var(--c-success); }
+.segmented--truefalse .is-false input:checked + span { background: var(--c-danger-bg);  color: var(--c-danger); }
+
+/* --- 5.2 Menu d'actions « ⋮ » ---------------------------------------------
+   Principe : <details>/<summary> natifs. Cliquer sur le summary ouvre/ferme
+   le panneau, sans JS. Limite : il ne se ferme pas tout seul quand on clique
+   ailleurs (il faudra 3 lignes de JS si vous voulez ce comportement). */
+.menu { position: relative; display: inline-block; }
+.menu > summary {
+  list-style: none; cursor: pointer;
+  display: grid; place-items: center; width: 32px; height: 32px;
+  border-radius: var(--radius-sm); color: var(--c-text);
+}
+.menu > summary::-webkit-details-marker { display: none; }
+.menu > summary:hover, .menu[open] > summary { background: var(--c-bg); }
+.menu__list {
+  position: absolute; right: 0; top: calc(100% + 4px); z-index: 10;
+  min-width: 180px; padding: 6px;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--radius); box-shadow: var(--shadow-pop);
+  text-align: left;
+}
+.menu__list a, .menu__list button {
+  display: block; width: 100%; padding: 8px 12px; border: 0; border-radius: var(--radius-sm);
+  background: none; text-align: left; font-size: 14px; color: var(--c-text); cursor: pointer;
+}
+.menu__list a:hover, .menu__list button:hover { background: var(--c-bg); text-decoration: none; }
+.menu__list .is-danger { color: var(--c-danger); }
+
+/* --- 5.3 Aperçu au survol (liste des exercices) ----------------------------
+   Principe : le popover est un enfant caché du titre ; :hover et :focus-within
+   l'affichent. Pur CSS. Le CONTENU de l'aperçu doit être fourni par le back
+   (ou chargé en JS à la demande si vous ne voulez pas tout générer d'avance). */
+.has-preview { position: relative; display: inline-block; }
+.preview-popover {
+  display: none;
+  position: absolute; left: 80px; top: calc(100% + 6px); z-index: 15;
+  width: 228px; min-height: 200px; padding: 12px;
+  background: var(--c-surface);
+  border: 6px solid #D9D9D9; border-radius: 16px;
+  box-shadow: var(--shadow-pop);
+  font-size: 9px; color: var(--c-text);
+}
+.has-preview:hover .preview-popover,
+.has-preview:focus-within .preview-popover { display: block; }
+
+/* --- 5.4 Fenêtre modale ---------------------------------------------------
+   Principe : la modale a un id ; un lien href="#id" la rend « :target » donc
+   visible, un lien href="#" la referme. Pur CSS, mais ça modifie l'URL et ne
+   piège pas le focus clavier. Alternative recommandée si vous ajoutez du JS :
+   l'élément natif <dialog> + dialog.showModal() / dialog.close(). */
+.modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 100;
+  align-items: center; justify-content: center;
+  background: rgba(27, 31, 138, .45);
+}
+.modal:target, .modal.is-open { display: flex; }
+.modal__box {
+  width: 480px; max-width: calc(100% - 32px);
+  padding: 32px; border-radius: 16px;
+  background: var(--c-surface); box-shadow: var(--shadow-modal);
+}
+.modal__head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; margin-left: -8px; }
+.modal__icon {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c-danger-bg); color: var(--c-danger); font-weight: 700; font-size: 18px;
+}
+.modal__title { font-size: 20px; font-weight: 700; }
+.modal__text { font-size: 15px; margin-bottom: 16px; }
+.modal__actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; }
+
+/* --- 5.5 Cartes de choix (choix du type d'exercice) ------------------------
+   Principe : chaque carte est un <label> contenant un radio caché.
+   :has(input:checked) permet de styler la carte entière quand elle est cochée
+   (supporté par tous les navigateurs récents). */
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+.choice-card {
+  position: relative; display: block; cursor: pointer;
+  min-height: 212px; padding: 28px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border); border-radius: var(--radius-lg);
+  transition: border-color .15s;
+}
+.choice-card:hover { border-color: var(--c-border-strong); }
+.choice-card input { position: absolute; opacity: 0; pointer-events: none; }
+.choice-card:has(input:checked) { border: 2px solid var(--c-primary); padding: 27px; }
+.choice-card:has(input:focus-visible) { outline: 3px solid rgba(27, 31, 138, .25); }
+.choice-card__check {
+  display: none; position: absolute; top: 23px; right: 23px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--c-primary); color: #fff; place-items: center;
+}
+.choice-card:has(input:checked) .choice-card__check { display: grid; }
+.choice-card__icon {
+  width: 56px; height: 56px; border-radius: 10px;
+  display: grid; place-items: center; margin-bottom: 20px;
+}
+.choice-card__icon--qcm   { background: var(--c-primary-soft); color: var(--c-primary); }
+.choice-card__icon--trous { background: var(--c-success-bg);  color: var(--c-success); }
+.choice-card__icon--vf    { background: var(--c-warning-bg);  color: var(--c-warning); }
+.choice-card__icon--assoc { background: var(--c-danger-bg);   color: var(--c-danger); }
+.choice-card__title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.choice-card__text { max-width: 420px; font-size: 14px; color: var(--c-text-muted); line-height: 1.6; }
+
+/* --- 5.6 Zone de dépôt de fichier -----------------------------------------
+   Principe : un <label> qui enveloppe un <input type="file"> caché. Cliquer
+   n'importe où dans la zone ouvre le sélecteur de fichiers : pur HTML.
+   Le glisser-déposer (dragover/drop) nécessite du JS. */
+.dropzone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 200px; cursor: pointer; text-align: center;
+  border: 2px dashed var(--c-border); border-radius: var(--radius-lg);
+  background: var(--c-bg);
+}
+.dropzone:hover, .dropzone.is-dragover { border-color: var(--c-primary); }
+.dropzone input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.dropzone__icon { color: var(--c-primary); margin-bottom: 18px; }
+.dropzone__title { font-size: 15px; font-weight: 700; }
+.dropzone__link { margin-top: 6px; font-size: 13px; color: var(--c-primary); }
+
+
+/* ==========================================================================
+   6. Styles spécifiques aux pages
+   ========================================================================== */
+
+/* --- 01 Connexion ------------------------------------------------------- */
+.login { display: grid; grid-template-columns: 640px 1fr; min-height: 100vh; }
+.login__aside {
+  position: relative; display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 72px; background: var(--c-primary); color: #fff;
+  border-left: 8px solid var(--c-accent);
+}
+.login__title { font-size: 40px; font-weight: 700; line-height: 1.2; margin-bottom: 18px; }
+.login__tagline { font-size: 18px; line-height: 1.45; color: var(--c-primary-light); }
+.login__school { position: absolute; left: 72px; bottom: 44px; font-size: 13px; color: #9EA2DC; }
+
+.login__main { position: relative; display: flex; align-items: center; justify-content: center; padding: 40px; }
+.login__lang { position: absolute; top: 24px; right: 24px; }
+.login__form { width: 400px; max-width: 100%; display: flex; flex-direction: column; gap: 18px; }
+.login__logo { width: 255px; margin-bottom: 40px; }
+.login__heading { font-size: 28px; font-weight: 700; }
+.login__sub { margin-top: 2px; margin-bottom: 18px; font-size: 15px; color: var(--c-text-muted); }
+.login__form .link-forgot { font-size: 13px; }
+.login__form .btn { margin-top: 6px; }
+
+/* --- 02 Accueil --------------------------------------------------------- */
+.quick-actions { display: flex; gap: 12px; margin-bottom: 40px; }
+.quick-actions .btn { height: 40px; }
+
+/* --- 04 Détail exercice ------------------------------------------------- */
+.preview-card { min-height: 660px; padding: 24px 32px; display: flex; flex-direction: column; }
+.preview-card__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.preview-card__footer {
+  margin-top: auto; padding-top: 18px; border-top: 2px solid var(--c-border);
+  font-size: 13px; color: var(--c-text-muted);
+}
+.exo-consigne { font-weight: 700; margin-bottom: 22px; }
+.exo-question + .exo-question { margin-top: 20px; }
+.exo-question__text { margin-bottom: 10px; }
+.exo-options { display: flex; gap: 0; padding-left: 20px; }
+.exo-options .check { width: 120px; }
+.exo-options b { font-weight: 700; }
+
+.info-list { display: flex; flex-direction: column; gap: 16px; font-size: 13px; }
+.info-list div { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.info-list dt { color: var(--c-text-muted); }
+.info-list dd { margin: 0; font-weight: 700; text-align: right; }
+
+.bullet-links li + li { margin-top: 8px; }
+.bullet-links a { font-size: 14px; }
+.bullet-links a::before { content: "• "; }
+
+/* --- 06 Éditeurs d'exercice --------------------------------------------- */
+.editor-question { padding: 14px 24px 22px 12px; border-radius: var(--radius); background: var(--c-bg); }
+.editor-question + .editor-question { margin-top: 34px; }
+.editor-question__top { display: flex; align-items: center; gap: 12px; }
+.editor-question__top .input { flex: 1; height: 36px; }
+.editor-question__points { width: 108px; }
+.editor-question__points .input { height: 36px; }
+.editor-answers { display: flex; align-items: center; gap: 18px; margin-top: 10px; padding-left: 50px; }
+.answer { display: flex; align-items: center; gap: 18px; }
+.answer .input { width: 190px; height: 32px; }
+.answer__letter { font-weight: 600; color: var(--c-text-muted); margin-right: 6px; }
+/* Réponse correcte : la case cochée colore le champ voisin (pur CSS via :has) */
+.answer:has(input[type="checkbox"]:checked) .input { border-color: var(--c-primary); }
+.answer .input-wrap { position: relative; }
+.answer .input-wrap .answer__letter { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); }
+.answer .input-wrap .input { padding-left: 34px; }
+
+/* Texte à trous */
+.gap-toolbar { display: flex; gap: 8px; padding: 6px 8px; background: var(--c-bg); border-radius: var(--radius) var(--radius) 0 0; }
+.gap-toolbar .btn { height: 32px; font-size: 13px; padding: 0 22px; }
+.gap-editor {
+  min-height: 132px; padding: 14px 16px;
+  border: 1px solid var(--c-border); border-radius: 0 0 var(--radius) var(--radius);
+  line-height: 36px; font-size: 16px;
+}
+.gap-editor:focus { outline: none; border-color: var(--c-primary); }
+.gap {
+  display: inline-block; min-width: 94px; padding: 0 10px; margin: 0 4px;
+  line-height: 24px; border: 1px solid var(--c-success); border-radius: var(--radius-sm);
+  background: var(--c-success-bg); color: var(--c-success); font-weight: 700;
+}
+.gap-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.gap-list__item { padding: 12px 14px; border-radius: var(--radius); background: var(--c-bg); }
+.gap-list__title { font-size: 13px; font-weight: 700; }
+.gap-list__meta { margin-top: 6px; font-size: 12px; color: var(--c-text-muted); }
+
+/* Vrai / Faux */
+.statement .input { flex: 1; height: 36px; }
+
+/* Association : ligne rouge reliant les deux colonnes (purement décoratif) */
+.pairs-head, .pair { display: grid; grid-template-columns: 24px minmax(0, 1fr) 48px minmax(0, 1fr) 32px; align-items: center; gap: 0; }
+.pairs-head { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--c-text-muted); margin-bottom: 10px; }
+.pairs-head span:nth-child(2), .pairs-head span:nth-child(4) { padding-left: 24px; }
+.pair + .pair { margin-top: 14px; }
+.pair .input { height: 40px; }
+.pair__link { position: relative; height: 2px; margin: 0 4px; background: var(--c-danger); }
+.pair__link::before, .pair__link::after {
+  content: ""; position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--c-danger); transform: translateY(-50%);
+}
+.pair__link::before { left: -3px; }
+.pair__link::after { right: -3px; }
+
+/* --- 08 Détail sujet ---------------------------------------------------- */
+.ordered-exos { display: flex; flex-direction: column; gap: 12px; }
+.ordered-exo { display: flex; align-items: center; gap: 16px; padding: 18px 16px; border-radius: var(--radius); background: var(--c-bg); }
+.ordered-exo__num {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  display: grid; place-items: center; background: var(--c-surface);
+  border: 1px solid var(--c-border); color: var(--c-primary); font-weight: 700; font-size: 14px;
+}
+.ordered-exo__body { flex: 1; min-width: 0; }
+.ordered-exo__title { font-weight: 700; }
+.ordered-exo__meta { margin-top: 4px; font-size: 13px; color: var(--c-text-muted); }
+
+/* --- 09 Composition d'un sujet ------------------------------------------ */
+.bank-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 16px; border: 1px solid var(--c-border); border-radius: var(--radius);
+}
+.bank-item + .bank-item { margin-top: 10px; }
+.bank-item__title { font-size: 14px; font-weight: 700; }
+.bank-item__meta { margin-top: 2px; font-size: 12px; color: var(--c-text-muted); }
+.bank-item.is-added { background: var(--c-bg); border-color: transparent; }
+.bank-item.is-added .bank-item__title { color: var(--c-text-muted); }
+.bank-item__added { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--c-success); }
+.bank-item .icon-btn { width: 40px; height: 32px; }
+
+.selected-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 16px; border: 1px solid var(--c-border); border-radius: var(--radius);
+}
+.selected-item + .selected-item { margin-top: 10px; }
+.selected-item.is-dragging { border: 2px solid var(--c-primary); box-shadow: var(--shadow-pop); }
+.selected-item__num { font-weight: 700; color: var(--c-primary); }
+.selected-item__body { flex: 1; min-width: 0; }
+.selected-item__title { font-size: 14px; font-weight: 700; }
+.selected-item__meta { font-size: 12px; color: var(--c-text-muted); }
+.selected-item__pts { font-size: 13px; color: var(--c-text-muted); }
+.dropzone-empty {
+  display: grid; place-items: center; height: 62px; margin-top: 12px;
+  border: 1px dashed var(--c-border-strong); border-radius: var(--radius);
+  font-size: 14px; color: var(--c-text-muted);
+}
+.total-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding: 6px 20px; border-radius: var(--radius-sm);
+  background: var(--c-bg);
+}
+.total-bar__label { font-size: 24px; font-weight: 700; }
+.total-bar__value { font-size: 20px; font-weight: 700; color: var(--c-primary); }
+
+/* --- 10 Import / Export ------------------------------------------------- */
+.select-list { border-top: 1px solid var(--c-border); }
+.select-list__row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; border-bottom: 1px solid var(--c-border);
+}
+.select-list__meta { font-size: 12px; color: var(--c-text-muted); }
+.select-all { padding: 14px 0; font-weight: 600; font-size: 14px; }
+
+.file-card { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--c-border); border-radius: var(--radius); }
+.file-card__icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: grid; place-items: center; background: var(--c-primary-soft); color: var(--c-primary);
+  font-size: 10px; font-weight: 700;
+}
+.file-card__name { font-size: 15px; font-weight: 700; }
+.file-card__meta { font-size: 12px; color: var(--c-text-muted); }
+
+/* --- 11 Résolution des conflits ----------------------------------------- */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat { display: flex; align-items: center; gap: 16px; padding: 18px 16px; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-lg); }
+.stat__value {
+  width: 40px; height: 40px; border-radius: var(--radius); display: grid; place-items: center;
+  font-size: 17px; font-weight: 700;
+}
+.stat__label { font-weight: 700; }
+.stat--success .stat__value { background: var(--c-success-bg); color: var(--c-success); }
+.stat--warning .stat__value { background: var(--c-warning-bg); color: var(--c-warning); }
+.stat--danger  .stat__value { background: var(--c-danger-bg);  color: var(--c-danger); }
+.stat--neutral .stat__value { background: var(--c-bg);         color: var(--c-text-subtle); }
+
+.table .th-action { color: var(--c-primary); cursor: pointer; background: none; border: 0; padding: 0; font: inherit; text-transform: inherit; letter-spacing: inherit; }
+.table td.cell-radio { height: 64px; }
+.table td.cell-radio .check { color: var(--c-text-muted); font-size: 14px; }
+/* Le libellé du choix coché passe en gras foncé (pur CSS) */
+.table td.cell-radio .check:has(input:checked) { color: var(--c-text); font-weight: 600; }
+
+/* --- 12 Paramètres ------------------------------------------------------ */
+.settings-card { min-height: 428px; }
+
+
+/* ==========================================================================
+   Responsive (minimal) : en dessous de 1100px on empile les colonnes
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .grid-2, .grid-main-aside, .choice-grid { grid-template-columns: 1fr; }
+  .form-row--meta { grid-template-columns: 1fr 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .login { grid-template-columns: 1fr; }
+  .login__aside { display: none; }
+}
+@media (max-width: 800px) {
+  .sidebar { display: none; }  /* TODO : prévoir un menu burger si besoin mobile */
+  .main { padding: 20px 16px; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .user__text, .logout { display: none; }
+}

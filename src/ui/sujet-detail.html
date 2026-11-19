@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Évaluation A1 — novembre — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link" href="exercices.html">Mes exercices</a>
+        <a class="nav__link is-active" href="sujets.html" aria-current="page">Mes sujets</a>
+        <a class="nav__link" href="import-export.html">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="sujets.html">Mes sujets</a></li>
+            <li aria-current="page">Évaluation A1 — novembre</li>
+          </ol>
+          <h1 class="page-title">Évaluation A1 — novembre</h1>
+          <p class="page-subtitle">6 exercices · niveau A1 · modifié le 06/11/2026</p>
+        </div>
+        <div class="page-header__actions">
+          <form method="post" action="#"><button class="btn btn--secondary" type="submit">Générer une variante</button></form>
+          <a class="btn btn--primary" href="sujet-composition.html">Modifier</a>
+        </div>
+      </div>
+
+      <div class="grid-main-aside" style="grid-template-columns:minmax(0,1fr) 356px">
+        <section class="card">
+          <h2 class="card__title">Exercices (dans l’ordre)</h2>
+          <p class="card__subtitle" style="font-size:13px;margin-bottom:18px">Consigne générale : répondez sur la feuille, durée 45 minutes.</p>
+          <ol class="ordered-exos">
+            <li class="ordered-exo">
+              <span class="ordered-exo__num">1</span>
+              <div class="ordered-exo__body">
+                <p class="ordered-exo__title">Les articles définis</p>
+                <p class="ordered-exo__meta">A1 · Grammaire</p>
+              </div>
+              <span class="badge badge--qcm">QCM</span>
+            </li>
+            <li class="ordered-exo">
+              <span class="ordered-exo__num">2</span>
+              <div class="ordered-exo__body">
+                <p class="ordered-exo__title">Passé composé ou imparfait ?</p>
+                <p class="ordered-exo__meta">B1 · Conjugaison</p>
+              </div>
+              <span class="badge badge--trous">Texte à trous</span>
+            </li>
+            <li class="ordered-exo">
+              <span class="ordered-exo__num">3</span>
+              <div class="ordered-exo__body">
+                <p class="ordered-exo__title">La vie à Paris</p>
+                <p class="ordered-exo__meta">A2 · Compréhension écrite</p>
+              </div>
+              <span class="badge badge--vraifaux">Vrai / Faux</span>
+            </li>
+            <li class="ordered-exo">
+              <span class="ordered-exo__num">4</span>
+              <div class="ordered-exo__body">
+                <p class="ordered-exo__title">Vocabulaire de la cuisine</p>
+                <p class="ordered-exo__meta">A2 · Lexique</p>
+              </div>
+              <span class="badge badge--association">Association</span>
+            </li>
+            <li class="ordered-exo">
+              <span class="ordered-exo__num">5</span>
+              <div class="ordered-exo__body">
+                <p class="ordered-exo__title">Les pronoms COD / COI</p>
+                <p class="ordered-exo__meta">B1 · Grammaire</p>
+              </div>
+              <span class="badge badge--qcm">QCM</span>
+            </li>
+            <li class="ordered-exo">
+              <span class="ordered-exo__num">6</span>
+              <div class="ordered-exo__body">
+                <p class="ordered-exo__title">Le subjonctif présent</p>
+                <p class="ordered-exo__meta">B2 · Conjugaison</p>
+              </div>
+              <span class="badge badge--trous">Texte à trous</span>
+            </li>
+          </ol>
+        </section>
+
+        <form class="card" method="post" action="#">
+          <h2 class="card__title" style="margin-bottom:20px">Exporter le sujet</h2>
+          <p class="field__label" style="margin-bottom:8px">Format</p>
+          <!-- Choix du format : radios stylisés (pur CSS) -->
+          <div class="segmented segmented--block" role="radiogroup" aria-label="Format">
+            <label><input type="radio" name="format" value="pdf" checked><span>PDF</span></label>
+            <label><input type="radio" name="format" value="html"><span>HTML</span></label>
+          </div>
+          <p class="field__label" style="margin:24px 0 10px">Version</p>
+          <div class="stack" style="gap:12px">
+            <label class="check"><input type="checkbox" name="versions[]" value="eleve" checked> Élève (sans corrigé)</label>
+            <label class="check"><input type="checkbox" name="versions[]" value="enseignant" checked> Enseignant (avec corrigé)</label>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit" style="margin-top:76px">Exporter</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

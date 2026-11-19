@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Résolution des conflits — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link" href="exercices.html">Mes exercices</a>
+        <a class="nav__link" href="sujets.html">Mes sujets</a>
+        <a class="nav__link is-active" href="import-export.html" aria-current="page">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="import-export.html">Import / Export</a></li>
+            <li aria-current="page">Résolution des conflits</li>
+          </ol>
+          <h1 class="page-title">Résolution des doublons et conflits</h1>
+          <p class="page-subtitle">paquet_lefebvre_A2.fle · 4 cas à traiter</p>
+        </div>
+        <div class="page-header__actions">
+          <a class="btn btn--secondary" href="import-export.html">Annuler l’import</a>
+          <button class="btn btn--primary" type="submit" form="form-conflits">Valider l’import</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat stat--success"><span class="stat__value">16</span><span class="stat__label">Nouveaux</span></div>
+        <div class="stat stat--warning"><span class="stat__value">3</span><span class="stat__label">Doublons</span></div>
+        <div class="stat stat--danger"><span class="stat__value">1</span><span class="stat__label">Conflit</span></div>
+        <div class="stat stat--neutral"><span class="stat__value">0</span><span class="stat__label">Erreurs</span></div>
+      </div>
+
+      <form id="form-conflits" method="post" action="#">
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:300px">Exercice</th><th style="width:120px">Cas</th><th>Détail</th>
+                <!-- « Tout … » : JS requis (cocher le radio correspondant sur toutes les lignes) -->
+                <th><button class="th-action" type="button" data-choix="ignorer">Tout ignorer</button></th>
+                <th><button class="th-action" type="button" data-choix="copie">Tout importer comme copie</button></th>
+                <th><button class="th-action" type="button" data-choix="remplacer">Tout remplacer</button></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Le libellé du choix coché passe en gras via CSS (:has), sans JS -->
+            <tr>
+              <td class="cell-strong">Les articles définis</td>
+              <td><span class="badge badge--danger">Conflit</span></td>
+              <td>Même titre, contenu différent</td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[1]" value="ignorer"> Ignorer</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[1]" value="copie"> Importer comme copie</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[1]" value="remplacer" checked> Remplacer</label></td>
+            </tr>
+            <tr>
+              <td class="cell-strong">Vocabulaire de la cuisine</td>
+              <td><span class="badge badge--warning">Doublon</span></td>
+              <td>Même titre</td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[2]" value="ignorer" checked> Ignorer</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[2]" value="copie"> Importer comme copie</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[2]" value="remplacer"> Remplacer</label></td>
+            </tr>
+            <tr>
+              <td class="cell-strong">Les pronoms COD / COI</td>
+              <td><span class="badge badge--warning">Doublon</span></td>
+              <td>Même titre</td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[3]" value="ignorer" checked> Ignorer</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[3]" value="copie"> Importer comme copie</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[3]" value="remplacer"> Remplacer</label></td>
+            </tr>
+            <tr>
+              <td class="cell-strong">Expressions de la météo</td>
+              <td><span class="badge badge--warning">Doublon</span></td>
+              <td>Même titre</td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[4]" value="ignorer"> Ignorer</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[4]" value="copie" checked> Importer comme copie</label></td>
+              <td class="cell-radio"><label class="check"><input type="radio" name="resolution[4]" value="remplacer"> Remplacer</label></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </main>
+  </div>
+
+</body>
+</html>

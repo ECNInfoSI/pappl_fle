@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modifier l’exercice — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link is-active" href="exercices.html" aria-current="page">Mes exercices</a>
+        <a class="nav__link" href="sujets.html">Mes sujets</a>
+        <a class="nav__link" href="import-export.html">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="exercices.html">Mes exercices</a></li>
+            <li aria-current="page">Modifier l’exercice</li>
+          </ol>
+          <h1 class="page-title">Modifier l’exercice</h1>
+          <p class="page-subtitle">Étape 2 sur 2 — QCM</p>
+        </div>
+        <div class="page-header__actions">
+          <a class="btn btn--secondary" href="exercices.html">Annuler</a>
+          <!-- Aperçu : ouvrir la page détail / un rendu en nouvel onglet (formtarget="_blank") -->
+          <button class="btn btn--secondary" type="submit" form="form-exercice" name="action" value="apercu" formtarget="_blank">Aperçu</button>
+          <button class="btn btn--primary" type="submit" form="form-exercice" name="action" value="enregistrer">Enregistrer</button>
+        </div>
+      </div>
+
+      <form id="form-exercice" class="stack" method="post" action="#">
+      <section class="card stack">
+        <div class="form-row form-row--meta">
+          <div class="field">
+            <label class="field__label" for="titre">Titre</label>
+            <input class="input" id="titre" name="titre" value="Les articles définis">
+          </div>
+          <div class="field">
+            <label class="field__label" for="niveau">Niveau</label>
+            <select class="select" id="niveau" name="niveau">
+              <option selected>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="theme">Thème</label>
+            <select class="select" id="theme" name="theme">
+              <option selected>Grammaire</option><option>Conjugaison</option><option>Lexique</option><option>Compréhension écrite</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="type">Type</label>
+            <!-- Type choisi à l'étape 1 : affiché en lecture seule -->
+            <input class="input" id="type" name="type" value="QCM" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="mots-cles">Mots-clés</label>
+          <!-- Saisie libre séparée par des virgules. Un vrai champ « tags » (puces) demanderait du JS. -->
+          <input class="input" id="mots-cles" name="mots_cles" value="article, déterminant, genre">
+        </div>
+      </section>
+      <section class="card">
+        <div class="field">
+          <label class="field__label" for="consigne">Consigne *</label>
+          <input class="input" id="consigne" name="consigne" value="Choisissez l’article défini qui convient." required>
+        </div>
+      </section>
+
+        <section class="card">
+          <div class="card__header">
+            <h2 class="card__title">Questions</h2>
+            <!-- Total : calculé par le back à l'enregistrement, ou en JS en direct (somme des champs points) -->
+            <span class="card__hint" style="font-weight:600">Total : 2 pts</span>
+          </div>
+
+          <!-- RÉORDONNANCEMENT (poignée ⋮⋮) : nécessite JS (ex : SortableJS ou API Drag & Drop)
+               + un champ caché « ordre » par question. -->
+          <div class="editor-question">
+            <div class="editor-question__top">
+              <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+              <span class="row-item__num">1.</span>
+              <input class="input" name="questions[1][texte]" value="___ maison est grande." aria-label="Énoncé de la question 1">
+              <label class="input-suffix editor-question__points">
+                <input class="input" type="number" min="0" step="0.5" name="questions[1][points]" value="1" aria-label="Points">
+                <span class="input-suffix__unit">pt</span>
+              </label>
+              <button class="icon-btn icon-btn--danger" type="button" aria-label="Supprimer la question"><svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.5 5.5l.8 11h7.4l.8-11M8.5 8.5v5M11.5 8.5v5"/></svg></button>
+            </div>
+            <div class="editor-answers">
+              <!-- Case cochée = bonne réponse. Le cadre bleu du champ est géré en CSS (:has). -->
+              <label class="answer"><input type="checkbox" name="questions[1][correct][]" value="A" aria-label="Bonne réponse A">
+                <span class="input-wrap"><span class="answer__letter">A.</span><input class="input" name="questions[1][reponses][]" value="le"></span></label>
+              <label class="answer"><input type="checkbox" name="questions[1][correct][]" value="B" checked aria-label="Bonne réponse B">
+                <span class="input-wrap"><span class="answer__letter">B.</span><input class="input" name="questions[1][reponses][]" value="la"></span></label>
+              <label class="answer"><input type="checkbox" name="questions[1][correct][]" value="C" aria-label="Bonne réponse C">
+                <span class="input-wrap"><span class="answer__letter">C.</span><input class="input" name="questions[1][reponses][]" value="les"></span></label>
+              <!-- JS requis : cloner un bloc .answer (ou bouton submit name="action" value="ajout_reponse" côté back) -->
+              <button class="link-action link-action--sm" type="button">+ Ajouter une réponse</button>
+            </div>
+          </div>
+          <div class="editor-question">
+            <div class="editor-question__top">
+              <svg class="icon drag-handle" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="7" cy="16" r="1.5"/><circle cx="13" cy="16" r="1.5"/></svg>
+              <span class="row-item__num">2.</span>
+              <input class="input" name="questions[2][texte]" value="___ enfants jouent dans le jardin." aria-label="Énoncé de la question 2">
+              <label class="input-suffix editor-question__points">
+                <input class="input" type="number" min="0" step="0.5" name="questions[2][points]" value="1" aria-label="Points">
+                <span class="input-suffix__unit">pt</span>
+              </label>
+              <button class="icon-btn icon-btn--danger" type="button" aria-label="Supprimer la question"><svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.5 5.5l.8 11h7.4l.8-11M8.5 8.5v5M11.5 8.5v5"/></svg></button>
+            </div>
+            <div class="editor-answers">
+              <!-- Case cochée = bonne réponse. Le cadre bleu du champ est géré en CSS (:has). -->
+              <label class="answer"><input type="checkbox" name="questions[2][correct][]" value="A" aria-label="Bonne réponse A">
+                <span class="input-wrap"><span class="answer__letter">A.</span><input class="input" name="questions[2][reponses][]" value="le"></span></label>
+              <label class="answer"><input type="checkbox" name="questions[2][correct][]" value="B" aria-label="Bonne réponse B">
+                <span class="input-wrap"><span class="answer__letter">B.</span><input class="input" name="questions[2][reponses][]" value="la"></span></label>
+              <label class="answer"><input type="checkbox" name="questions[2][correct][]" value="C" checked aria-label="Bonne réponse C">
+                <span class="input-wrap"><span class="answer__letter">C.</span><input class="input" name="questions[2][reponses][]" value="les"></span></label>
+              <!-- JS requis : cloner un bloc .answer (ou bouton submit name="action" value="ajout_reponse" côté back) -->
+              <button class="link-action link-action--sm" type="button">+ Ajouter une réponse</button>
+            </div>
+          </div>
+
+          <!-- AJOUT DE QUESTION : JS requis (cloner un <template>), ou aller-retour serveur -->
+          <div style="margin:22px 0 0 22px"><button class="link-action" type="button">+ Ajouter une question</button></div>
+        </section>
+      </form>
+    </main>
+  </div>
+
+</body>
+</html>

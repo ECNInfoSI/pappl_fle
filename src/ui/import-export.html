@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Import / Export — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link" href="exercices.html">Mes exercices</a>
+        <a class="nav__link" href="sujets.html">Mes sujets</a>
+        <a class="nav__link is-active" href="import-export.html" aria-current="page">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li aria-current="page">Import / Export</li>
+          </ol>
+          <h1 class="page-title">Import / Export</h1>
+          <p class="page-subtitle">Échangez des exercices avec d’autres enseignants via des paquets .fle</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- ---------------- EXPORT ---------------- -->
+        <form class="card" method="post" action="#">
+          <h2 class="card__title">Exporter un paquet</h2>
+          <p class="card__subtitle" style="margin-bottom:18px">Sélectionnez les exercices à partager.</p>
+          <label class="search" style="display:block;margin-bottom:8px">
+            <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5L17 17"/></svg>
+            <span class="sr-only">Filtrer</span>
+            <!-- Filtrage de la liste : JS (masquer les lignes qui ne correspondent pas) -->
+            <input class="input" type="search" placeholder="Filtrer…">
+          </label>
+          <!-- « Tout sélectionner » + compteur du bouton : JS requis -->
+          <label class="check select-all"><input type="checkbox" checked> Tout sélectionner (6)</label>
+          <ul class="select-list">
+            <li class="select-list__row">
+              <label class="check"><input type="checkbox" name="exercices[]" value="" checked> Les articles définis</label>
+              <span class="select-list__meta">QCM · A1</span>
+            </li>
+            <li class="select-list__row">
+              <label class="check"><input type="checkbox" name="exercices[]" value="" checked> Passé composé ou imparfait ?</label>
+              <span class="select-list__meta">Texte à trous · B1</span>
+            </li>
+            <li class="select-list__row">
+              <label class="check"><input type="checkbox" name="exercices[]" value="" checked> La vie à Paris</label>
+              <span class="select-list__meta">Vrai / Faux · A2</span>
+            </li>
+            <li class="select-list__row">
+              <label class="check"><input type="checkbox" name="exercices[]" value="" checked> Vocabulaire de la cuisine</label>
+              <span class="select-list__meta">Association · A2</span>
+            </li>
+            <li class="select-list__row">
+              <label class="check"><input type="checkbox" name="exercices[]" value=""> Les pronoms COD / COI</label>
+              <span class="select-list__meta">QCM · B1</span>
+            </li>
+            <li class="select-list__row">
+              <label class="check"><input type="checkbox" name="exercices[]" value="" checked> Le subjonctif présent</label>
+              <span class="select-list__meta">Texte à trous · B2</span>
+            </li>
+          </ul>
+          <div class="field" style="margin-top:18px">
+            <label class="field__label" for="nom-fichier">Nom du fichier</label>
+            <input class="input" id="nom-fichier" name="nom_fichier" value="exercices_lefebvre_2026-11-08.fle">
+          </div>
+          <button class="btn btn--primary btn--block" type="submit" style="margin-top:18px">Exporter 5 exercices</button>
+        </form>
+
+        <!-- ---------------- IMPORT ---------------- -->
+        <form class="card" method="post" action="import-conflits.html" enctype="multipart/form-data">
+          <h2 class="card__title">Importer un paquet</h2>
+          <p class="card__subtitle" style="margin-bottom:18px">Vos exercices existants ne seront jamais remplacés sans accord.</p>
+
+          <!-- Zone de dépôt : clic = sélecteur de fichiers (pur HTML, label + input file).
+               Glisser-déposer : JS requis (dragover → .is-dragover, drop → input.files = e.dataTransfer.files) -->
+          <label class="dropzone" style="position:relative">
+            <input type="file" name="paquet" accept=".fle">
+            <svg class="dropzone__icon" width="34" height="44" viewBox="0 0 34 44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 33V3M5 15L17 3l12 12M1 42h32"/></svg>
+            <span class="dropzone__title">Déposez un fichier .fle ici</span>
+            <span class="dropzone__link">ou cliquez pour parcourir</span>
+          </label>
+
+          <!-- BACK/JS : bloc affiché une fois un fichier choisi -->
+          <p class="field__label" style="margin:30px 0 8px">Fichier sélectionné</p>
+          <div class="file-card">
+            <span class="file-card__icon">.fle</span>
+            <div><p class="file-card__name">paquet_lefebvre_A2.fle</p><p class="file-card__meta">20 exercices · format v1 · 48 Ko</p></div>
+          </div>
+
+          <!-- BACK : résultat de l'analyse -->
+          <div class="alert alert--warning" style="margin-top:16px;padding:20px 16px">
+            <strong>Analyse terminée : 16 nouveaux exercices,<br>3 doublons et 1 conflit détectés.</strong>
+          </div>
+
+          <button class="btn btn--primary btn--block" type="submit" style="margin-top:82px">Analyser et importer</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

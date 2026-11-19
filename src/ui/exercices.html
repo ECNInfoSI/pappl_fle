@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mes exercices — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="accueil.html">Accueil</a>
+        <a class="nav__link is-active" href="exercices.html" aria-current="page">Mes exercices</a>
+        <a class="nav__link" href="sujets.html">Mes sujets</a>
+        <a class="nav__link" href="import-export.html">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb">
+            <li><a href="accueil.html">Accueil</a></li>
+            <li aria-current="page">Mes exercices</li>
+          </ol>
+          <h1 class="page-title">Mes exercices</h1>
+          <p class="page-subtitle">128 exercices</p> <!-- BACK : nombre total -->
+        </div>
+        <div class="page-header__actions">
+          <a class="btn btn--secondary" href="import-export.html">Importer</a>
+          <a class="btn btn--primary" href="exercice-nouveau.html">+ Nouvel exercice</a>
+        </div>
+      </div>
+
+      <!-- Filtres : un simple formulaire GET. Sans JS, l'utilisateur valide avec Entrée ;
+           avec JS, soumettre le formulaire sur l'événement « change » des <select>. -->
+      <form class="toolbar" method="get" action="exercices.html">
+        <label class="search">
+          <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5L17 17"/></svg>
+          <span class="sr-only">Rechercher</span>
+          <input class="input" type="search" name="q" placeholder="Rechercher par mot-clé…">
+        </label>
+        <select class="select" name="type" aria-label="Type">
+          <option value="">Type : Tous</option><option>QCM</option><option>Texte à trous</option><option>Vrai / Faux</option><option>Association</option>
+        </select>
+        <!-- La maquette montre une sélection multiple (« A2, B1 »). Un <select multiple> natif
+             est peu ergonomique : soit un menu <details> contenant des cases à cocher (pur HTML/CSS,
+             même principe que .menu), soit un composant JS. Version simple ci-dessous. -->
+        <select class="select" name="niveau" aria-label="Niveau">
+          <option value="">Niveau : Tous</option><option>A1</option><option selected>Niveau : A2, B1</option><option>B1</option><option>B2</option>
+        </select>
+        <select class="select" name="theme" aria-label="Thème">
+          <option value="">Thème : Tous</option><option>Grammaire</option><option>Conjugaison</option><option>Lexique</option>
+        </select>
+        <select class="select" name="tri" aria-label="Trier">
+          <option value="date_desc">Trier : Date ↓</option><option value="date_asc">Trier : Date ↑</option><option value="titre">Trier : Titre</option>
+        </select>
+      </form>
+
+      <!-- BACK : afficher uniquement si des filtres sont actifs. Chaque « × » = lien vers l'URL sans ce filtre -->
+      <div class="active-filters">
+        <span>Filtres :</span>
+        <span class="chip">Niveau A2 <a class="chip__remove" href="#" aria-label="Retirer le filtre">×</a></span>
+        <span class="chip">Niveau B1 <a class="chip__remove" href="#" aria-label="Retirer le filtre">×</a></span>
+        <a href="exercices.html">Tout effacer</a>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <!-- « Tout sélectionner » : nécessite JS (cocher toutes les cases du tbody) -->
+              <th class="cell-check"><input type="checkbox" aria-label="Tout sélectionner"></th>
+              <th>Titre</th><th>Type</th><th>Niveau</th><th>Catégorie</th><th>Thème</th><th>Créé le</th><th><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- BACK : boucle sur les exercices de la page courante -->
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Les articles définis »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Les articles définis
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--qcm">QCM</span></td>
+              <td>A1</td><td>Grammaire</td><td>Voyage</td><td>05/11/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Passé composé ou imparfait ? »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Passé composé ou imparfait ?
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--trous">Texte à trous</span></td>
+              <td>B1</td><td>Conjugaison</td><td>Assos</td><td>03/11/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « La vie à Paris »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">La vie à Paris
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--vraifaux">Vrai / Faux</span></td>
+              <td>A2</td><td>Compréhension écrite</td><td>Environnement</td><td>28/10/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Vocabulaire de la cuisine »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Vocabulaire de la cuisine
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--association">Association</span></td>
+              <td>A2</td><td>Lexique</td><td>Espace</td><td>24/10/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Les pronoms COD / COI »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Les pronoms COD / COI
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--qcm">QCM</span></td>
+              <td>B1</td><td>Grammaire</td><td>Loisirs</td><td>20/10/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Le subjonctif présent »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Le subjonctif présent
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--trous">Texte à trous</span></td>
+              <td>B2</td><td>Conjugaison</td><td>Environnement</td><td>15/10/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Expressions de la météo »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Expressions de la météo
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--association">Association</span></td>
+              <td>A1</td><td>Lexique</td><td>Loisirs</td><td>12/10/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="cell-check"><input type="checkbox" name="selection[]" value="" aria-label="Sélectionner « Un week-end à Lyon »"></td>
+              <td class="cell-title"><span class="has-preview" tabindex="0">Un week-end à Lyon
+                <!-- APERÇU AU SURVOL (pur CSS, voir .preview-popover dans style.css).
+                     BACK : injecter ici une version miniature de l'exercice
+                     (consigne + questions), ou laisser vide et charger en JS au survol. -->
+                <span class="preview-popover" role="tooltip"></span>
+              </span></td>
+              <td><span class="badge badge--vraifaux">Vrai / Faux</span></td>
+              <td>A2</td><td>Compréhension écrite</td><td>Voyage</td><td>08/10/2026</td>
+              <td class="cell-actions">
+                <a class="open-link" href="exercice-detail.html">Ouvrir</a>
+                <details class="menu">
+              <summary aria-label="Plus d'actions"><svg class="icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></summary>
+              <div class="menu__list">
+                <!-- BACK : adapter les actions et leurs URLs -->
+                <a href=#>Modifier</a>
+                <a href=#>Dupliquer</a>
+                <button type=button class=is-danger>Supprimer</button>
+              </div>
+            </details>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination : BACK génère les liens (?page=n) -->
+      <div class="pagination-bar">
+        <span>1–8 sur 128</span>
+        <nav class="pagination" aria-label="Pagination">
+          <a href="?page=1" aria-label="Page précédente">‹</a>
+          <span class="is-current" aria-current="page">1</span>
+          <a href="?page=2">2</a>
+          <a href="?page=3">3</a>
+          <span>…</span>
+          <a href="?page=16">16</a>
+          <a href="?page=2" aria-label="Page suivante">›</a>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil — App FLE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — identique sur toutes les pages connectées.
+       BACK : à factoriser dans un gabarit/partial (layout commun).
+       ============================================================ -->
+  <header class="app-header">
+    <a class="brand" href="accueil.html">
+      <img class="brand__logo" src="assets/logo-centrale-pekin.png" alt="Centrale Pékin">
+      <span class="brand__name">App FLE</span>
+    </a>
+
+    <div class="header-right">
+      <!-- Sélecteur de langue : <select> natif, il suffit de soumettre / rediriger au change -->
+      <label class="sr-only" for="lang">Langue</label>
+      <select class="select select--sm" id="lang" name="lang">
+        <option value="fr" selected>FR</option>
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+      </select>
+
+      <!-- BACK : initiales, nom et rôle de l'utilisateur connecté -->
+      <div class="user">
+        <span class="avatar">GL</span>
+        <div class="user__text">
+          <div class="user__name">Grégory Lefebvre</div>
+          <div class="user__role">Enseignant · Admin</div>
+        </div>
+      </div>
+      <a class="logout" href="index.html">Déconnexion</a>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ============================================================
+         SIDEBAR — BACK : poser .is-active + aria-current="page" sur
+         le lien de la page courante. Masquer « Administration » si
+         l'utilisateur n'est pas admin.
+         ============================================================ -->
+    <aside class="sidebar">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link is-active" href="accueil.html" aria-current="page">Accueil</a>
+        <a class="nav__link" href="exercices.html">Mes exercices</a>
+        <a class="nav__link" href="sujets.html">Mes sujets</a>
+        <a class="nav__link" href="import-export.html">Import / Export</a>
+        <a class="nav__link" href="parametres.html">Paramètres</a>
+        <hr class="nav__separator">
+        <a class="nav__link" href="admin-comptes.html">Administration</a>
+      </nav>
+      <p class="sidebar__footer">v1.0 · Centrale Pékin</p>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <ol class="breadcrumb"><li aria-current="page">Accueil</li></ol>
+          <!-- BACK : prénom + nom de l'utilisateur -->
+          <h1 class="page-title">Bonjour Grégory Lefebvre</h1>
+          <p class="page-subtitle">Que souhaitez-vous faire aujourd’hui ?</p>
+        </div>
+      </div>
+
+      <h2 class="section-title">Actions rapides</h2>
+      <div class="quick-actions">
+        <a class="btn btn--primary" href="exercice-nouveau.html">+ Nouvel exercice</a>
+        <a class="btn btn--secondary" href="sujet-composition.html">+ Nouveau sujet</a>
+        <a class="btn btn--secondary" href="import-export.html">Importer un paquet</a>
+      </div>
+
+      <h2 class="section-title">Récemment modifiés</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr><th>Titre</th><th>Type</th><th>Niveau</th><th>Thème</th><th>Modifié le</th></tr>
+          </thead>
+          <tbody>
+            <!-- BACK : boucle sur les 5 derniers exercices modifiés.
+                 Classe du badge selon le type : badge--qcm | badge--trous | badge--vraifaux | badge--association -->
+            <tr>
+              <td class="cell-strong"><a href="exercice-detail.html" style="color:inherit">Les articles définis</a></td>
+              <td><span class="badge badge--qcm">QCM</span></td>
+              <td>A1</td><td>Grammaire</td><td>05/11/2026</td>
+            </tr>
+            <tr>
+              <td class="cell-strong">Passé composé ou imparfait ?</td>
+              <td><span class="badge badge--trous">Texte à trous</span></td>
+              <td>B1</td><td>Conjugaison</td><td>03/11/2026</td>
+            </tr>
+            <tr>
+              <td class="cell-strong">La vie à Paris</td>
+              <td><span class="badge badge--vraifaux">Vrai / Faux</span></td>
+              <td>A2</td><td>Compréhension écrite</td><td>28/10/2026</td>
+            </tr>
+            <tr>
+              <td class="cell-strong">Vocabulaire de la cuisine</td>
+              <td><span class="badge badge--association">Association</span></td>
+              <td>A2</td><td>Lexique</td><td>24/10/2026</td>
+            </tr>
+            <tr>
+              <td class="cell-strong">Les pronoms COD / COI</td>
+              <td><span class="badge badge--qcm">QCM</span></td>
+              <td>B1</td><td>Grammaire</td><td>20/10/2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
